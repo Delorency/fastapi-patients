@@ -1,0 +1,24 @@
+[project]
+name = "fastapi-patients"
+version = "0.1.0"
+description = "API for patient management and MBR calculation"
+authors = [
+    {name = "delorency",email = "delorency@gmail.com"}
+]
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = [
+    "fastapi (>=0.118.3,<0.119.0)",
+    "pydantic (>=2.12.0,<3.0.0)",
+    "alembic (>=1.16.5,<2.0.0)",
+    "psycopg2-binary (>=2.9.11,<3.0.0)",
+    "dotenv (>=0.9.9,<0.10.0)",
+    "dependency-injector (>=4.48.2,<5.0.0)",
+    "pydantic-settings (>=2.11.0,<3.0.0)",
+    "uvicorn (>=0.37.0,<0.38.0)"
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
