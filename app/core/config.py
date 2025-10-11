@@ -50,3 +50,6 @@ class Configs(BaseSettings):
 	servercfg:ServerConfig = ServerConfig()
 	dbcfg:DBConfig = DBConfig()
 	apicfg:APIConfig = APIConfig()
+
+
+configs = Configs()
