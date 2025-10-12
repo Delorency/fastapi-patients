@@ -2,8 +2,8 @@ from dependency_injector import containers, providers
 
 from .database import Database
 from .config import configs
-from repos import *
-from services import *
+from app.repos import *
+from app.services import *
 
 
 class Container(containers.DeclarativeContainer):
