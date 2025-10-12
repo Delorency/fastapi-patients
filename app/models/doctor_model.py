@@ -12,5 +12,7 @@ class Doctor(Base, FioBase):
     __tablename__= "doctor"
     
     patients:Mapped[List["Patient"]] = relationship(
-        secondary=association_table_patient_doctor, back_populates="doctors"
+        secondary=association_table_patient_doctor,
+        back_populates="doctors",
+        order_by="desc(Patient.created_at)"
     )

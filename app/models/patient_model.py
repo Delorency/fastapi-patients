@@ -25,9 +25,11 @@ class Patient(Base, FioBase):
     weight:Mapped[int] = mapped_column(SmallInteger)
 
     doctors:Mapped[List["Doctor"]] = relationship(
-        secondary=association_table_patient_doctor, back_populates="patients"
+        secondary=association_table_patient_doctor,
+        back_populates="patients",
+        order_by="desc(Doctor.created_at)"
     )
 
     __table_args__ = (
-        UniqueConstraint('first_name', 'last_name', 'middle_name', 'birthday'),
+        UniqueConstraint('first_name', 'last_name', 'middle_name'),
     )

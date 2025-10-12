@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from sqlalchemy import BigInteger, String, DateTime, func, Table, Column, ForeignKey
+from sqlalchemy import BigInteger, String, DateTime, func, Table, Column, ForeignKey, UniqueConstraint
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
 
@@ -23,4 +23,5 @@ association_table_patient_doctor = Table(
     Base.metadata,
     Column("patient_id", ForeignKey("patient.id"), primary_key=True),
     Column("doctor_id", ForeignKey("doctor.id"), primary_key=True),
+    UniqueConstraint("patient_id", "doctor_id", name="eq_patient_doctor")
 )
