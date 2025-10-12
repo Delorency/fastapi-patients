@@ -1,1 +1,1 @@
-from .base import Base, FioBase
+from .base import Base, FioBase, association_table_patient_doctor

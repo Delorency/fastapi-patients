@@ -18,9 +18,9 @@ class FioBase(DeclarativeBase):
 
 
 
-# association_table_patient_doctor = Table(
-#     "association_table",
-#     Base.metadata,
-#     Column("patient_id", ForeignKey("patient.id"), primary_key=True),
-#     Column("doctor_id", ForeignKey("doctor.id"), primary_key=True),
-# )
+association_table_patient_doctor = Table(
+    "association_table",
+    Base.metadata,
+    Column("patient_id", ForeignKey("patient.id"), primary_key=True),
+    Column("doctor_id", ForeignKey("doctor.id"), primary_key=True),
+)
