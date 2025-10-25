@@ -1,8 +1,8 @@
-from app.repos.base import BaseRepo
+from app.repos import DoctorRepo
 from .base import BaseService
 
 
 
 class DoctorService(BaseService):
-    def __init__(self, repo:BaseRepo) -> None:
+    def __init__(self, repo:DoctorRepo) -> None:
         super().__init__(repo)

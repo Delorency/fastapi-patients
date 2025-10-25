@@ -1,9 +1,8 @@
 from typing import Callable
 from contextlib import AbstractContextManager
-from sqlalchemy.orm import Session, selectinload
+from sqlalchemy.orm import Session
 
 from app.models.base import Base
-from app.schemes.filters import Pagination
 
 
 class BaseRepo:

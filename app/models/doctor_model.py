@@ -1,18 +1,15 @@
-from typing import List
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from enum import Enum as PyEnum
-
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
-
-from .base import Base, FioBase, association_table_patient_doctor
+from .base import BaseModel, FioBase
+from .patient2doctor import Patient2Doctor
 
 
 
-class Doctor(Base, FioBase):
+class Doctor(BaseModel, FioBase):
     __tablename__= "doctor"
     
-    patients:Mapped[List["Patient"]] = relationship(
-        secondary=association_table_patient_doctor,
+    patients:Mapped[list["Patient"]] = relationship(
+        secondary=Patient2Doctor,
         back_populates="doctors",
         order_by="desc(Patient.created_at)"
     )

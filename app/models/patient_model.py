@@ -1,4 +1,3 @@
-from typing import List
 from datetime import date
 
 from enum import Enum as PyEnum
@@ -6,7 +5,8 @@ from enum import Enum as PyEnum
 from sqlalchemy import SmallInteger, func, Date, Enum, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from .base import Base, FioBase, association_table_patient_doctor
+from .base import BaseModel, FioBase
+from .patient2doctor import Patient2Doctor
 
 
 
@@ -15,7 +15,7 @@ class PatientGender(PyEnum):
     female = "female"
 
 
-class Patient(Base, FioBase):
+class Patient(BaseModel, FioBase):
     __tablename__= "patient"
     birthday:Mapped[date] = mapped_column(Date)
     
@@ -24,8 +24,8 @@ class Patient(Base, FioBase):
     height:Mapped[int] = mapped_column(SmallInteger)
     weight:Mapped[int] = mapped_column(SmallInteger)
 
-    doctors:Mapped[List["Doctor"]] = relationship(
-        secondary=association_table_patient_doctor,
+    doctors:Mapped[list["Doctor"]] = relationship(
+        secondary=Patient2Doctor,
         back_populates="patients",
         order_by="desc(Doctor.created_at)"
     )
