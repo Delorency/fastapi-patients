@@ -18,7 +18,7 @@ class BaseRepo:
         self._model = model
 
 
-    def __get_list(self, pag:Pagination) -> list[BaseModel]:
+    def _get_list(self, pag:Pagination) -> list[BaseModel]:
         with self._session() as session:
             return (
                 session.query(self._model)
@@ -27,7 +27,7 @@ class BaseRepo:
             ).all()
 
 
-    def __get_by_id(self, id:int) -> BaseModel:
+    def _get_by_id(self, id:int) -> BaseModel:
         with self._session() as session:
             obj = session.query(self._model).filter(self._model.id==id).first()
             
@@ -36,7 +36,7 @@ class BaseRepo:
             return obj
         
 
-    def __update(self, id:int, schema:PydanticBaseModel, exclude_none:bool = True) -> BaseModel:
+    def _update(self, id:int, schema:PydanticBaseModel, exclude_none:bool = True) -> BaseModel:
         with self._session() as session:
             try:
                 query = session.query(self._model).filter(self._model.id==id).update(**schema.model_dump(exclude_none=exclude_none))
@@ -48,7 +48,7 @@ class BaseRepo:
             return self.__get_by_id(id)
 
 
-    def __delete(self, id:int) -> None:
+    def _delete(self, id:int) -> None:
         with self._session() as session:
             obj = session.query(self._model).filter(self._model.id==id).first()
 
