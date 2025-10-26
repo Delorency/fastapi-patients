@@ -1,0 +1,1 @@
+from .patient_api import router as patient_router

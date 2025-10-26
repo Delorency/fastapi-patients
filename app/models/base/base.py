@@ -1,6 +1,7 @@
+from typing import Optional
 from datetime import datetime
 
-from sqlalchemy import BigInteger, String, DateTime, func
+from sqlalchemy import BigInteger, String, DateTime, func, UniqueConstraint
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
 
@@ -19,4 +20,8 @@ class FioBase(Base):
     __abstract__ = True
     first_name:Mapped[str] = mapped_column(String(128))
     last_name:Mapped[str] = mapped_column(String(128))
-    middle_name:Mapped[str] = mapped_column(String(128))
+    middle_name: Mapped[Optional[str]] = mapped_column(String(128), nullable=True)
+
+    __table_args__ = (
+        UniqueConstraint('first_name', 'last_name', 'middle_name'),
+    )

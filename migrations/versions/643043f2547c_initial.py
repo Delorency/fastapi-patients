@@ -1,8 +1,8 @@
 """initial
 
-Revision ID: 2f601b774929
+Revision ID: 643043f2547c
 Revises: 
-Create Date: 2025-10-25 15:03:29.160400
+Create Date: 2025-10-26 12:21:46.903602
 
 """
 from typing import Sequence, Union
@@ -12,7 +12,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = '2f601b774929'
+revision: str = '643043f2547c'
 down_revision: Union[str, Sequence[str], None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -28,7 +28,8 @@ def upgrade() -> None:
     sa.Column('first_name', sa.String(length=128), nullable=False),
     sa.Column('last_name', sa.String(length=128), nullable=False),
     sa.Column('middle_name', sa.String(length=128), nullable=False),
-    sa.PrimaryKeyConstraint('id')
+    sa.PrimaryKeyConstraint('id'),
+    sa.UniqueConstraint('first_name', 'last_name', 'middle_name')
     )
     op.create_table('patient',
     sa.Column('birthday', sa.Date(), nullable=False),
@@ -48,8 +49,8 @@ def upgrade() -> None:
     sa.Column('patient_id', sa.BigInteger(), nullable=False),
     sa.Column('doctor_id', sa.BigInteger(), nullable=False),
     sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=False),
-    sa.ForeignKeyConstraint(['doctor_id'], ['doctor.id'], ),
-    sa.ForeignKeyConstraint(['patient_id'], ['patient.id'], ),
+    sa.ForeignKeyConstraint(['doctor_id'], ['doctor.id'], ondelete='CASCADE'),
+    sa.ForeignKeyConstraint(['patient_id'], ['patient.id'], ondelete='CASCADE'),
     sa.PrimaryKeyConstraint('patient_id', 'doctor_id')
     )
     # ### end Alembic commands ###

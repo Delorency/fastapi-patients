@@ -1,3 +1,3 @@
 from .doctor_repo import DoctorRepo
 from .patient_repo import PatientRepo
-from .base import Patient2DoctorRepo
+from .patient2doctor_repo import Patient2DoctorRepo

@@ -1,4 +1,4 @@
-from pydantic import BaseModel, field_validator
+from pydantic import BaseModel, field_validator, Field
 
 from app.core.config import configs
 
@@ -9,7 +9,7 @@ class Pagination(BaseModel):
 
     @field_validator('page')
     def validate_page(cls, value):
-        if value < 0:
+        if value <= 0:
             return configs.apicfg.page
         return value
         

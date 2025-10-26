@@ -3,7 +3,7 @@ from contextlib import AbstractContextManager
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
 
-from app.models.base import BaseRepo
+from app.repos.base import BaseRepo
 from app.models import Patient2Doctor
 from app.core.exceptions import BadRequestError, ServerSideError
 
