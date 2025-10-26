@@ -25,6 +25,7 @@ class BaseRepo:
                 .order_by(desc(self._model.created_at))
                 .offset(pag.page-1 * pag.limit).limit(pag.limit)
             ).all()
+        return ServerSideError()
 
 
     def _get_by_id(self, id:int) -> BaseModel:
@@ -34,6 +35,7 @@ class BaseRepo:
             if obj is None: raise NotFoundError(f'Not found with id={id}')
 
             return obj
+        return ServerSideError()
         
 
     def _update(self, id:int, schema:PydanticBaseModel, exclude_none:bool = True) -> BaseModel:
@@ -46,6 +48,7 @@ class BaseRepo:
                 raise e
             
             return self.__get_by_id(id)
+        return ServerSideError()
 
 
     def _delete(self, id:int) -> None:
@@ -60,3 +63,4 @@ class BaseRepo:
                 session.commit()
             except:
                 raise ServerSideError("Delete error")
+        return ServerSideError()

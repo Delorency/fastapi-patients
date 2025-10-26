@@ -1,23 +1,17 @@
 from datetime import datetime
 
-from typing import Optional, Literal
+from typing import Literal
 from pydantic import BaseModel, Field
 
+from .base import BaseSchema
 
 
-class DoctorForPatientSchema(BaseModel):
+class DoctorForPatientSchema(BaseSchema, BaseModel):
     id:int
-    last_name:str
-    first_name:str
-    middle_name:Optional[str]
 
 
-
-class PatientSchema(BaseModel):
+class PatientSchema(BaseSchema, BaseModel):
     id:int
-    last_name:str
-    first_name:str
-    middle_name:Optional[str]
 
     gender:Literal["male", "female"]
 
@@ -28,6 +22,18 @@ class PatientSchema(BaseModel):
 
     created_at:datetime
     updated_at:datetime
+
+    class Config:
+        from_attributes = True
+
+
+class PatientCreateRequest(BaseSchema, BaseModel):
+    gender:Literal["male", "female"]
+
+    height:int = Field(..., gt=0)
+    weight:int = Field(..., gt=0)
+
+    doctors:list[int]
 
     class Config:
         from_attributes = True
