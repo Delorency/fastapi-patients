@@ -19,8 +19,11 @@ class BaseService:
     def create(self, schema:BaseModel) -> BaseModel:
         return self._repo._create(schema)
     
-    def update(self, schema:BaseModel) -> BaseModel:
-        return self._repo._update(schema)
+    def full_update(self, id:int, schema:BaseModel) -> BaseModel:
+        return self._repo._update(id, schema, exclude_none=False)
+    
+    def partial_update(self, id:int, schema:BaseModel) -> BaseModel:
+        return self._repo._update(id, schema, exclude_none=True)
     
     def delete(self, id:int):
         return self._repo._delete(id)

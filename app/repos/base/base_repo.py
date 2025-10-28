@@ -1,14 +1,13 @@
 from typing import Callable
 from contextlib import AbstractContextManager
 from sqlalchemy import desc
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, selectinload
 
 from pydantic import BaseModel as PydanticBaseModel
 
 from app.models.base import BaseModel
 from app.schemes.filters import Pagination
 from app.core.exceptions import NotFoundError, ServerSideError
-
 
 
 
@@ -30,9 +29,15 @@ class BaseRepo:
 
     def _get_by_id(self, id:int) -> BaseModel:
         with self._session() as session:
-            obj = session.query(self._model).filter(self._model.id==id).first()
+            obj = (
+                session.query(self._model)
+                .filter(self._model.id==id)
+                .options(selectinload(self._model.doctors))
+                .first()
+            )
             
-            if obj is None: raise NotFoundError(f'Not found with id={id}')
+            if obj is None:
+                raise NotFoundError(f'Not found with id={id}')
 
             return obj
         return ServerSideError()
@@ -47,7 +52,7 @@ class BaseRepo:
                 session.rollback()
                 raise e
             
-            return self.__get_by_id(id)
+            return self._get_by_id(id)
         return ServerSideError()
 
 
@@ -63,4 +68,5 @@ class BaseRepo:
                 session.commit()
             except:
                 raise ServerSideError("Delete error")
+            return
         return ServerSideError()

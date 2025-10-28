@@ -6,8 +6,12 @@ from pydantic import BaseModel, Field
 from .base import BaseSchema
 
 
-class DoctorForPatientSchema(BaseSchema, BaseModel):
+
+class DoctorForPatientSchema(BaseModel, BaseSchema):
     id:int
+
+    class Config:
+        from_attributes = True
 
 
 class PatientSchema(BaseSchema, BaseModel):
@@ -27,13 +31,31 @@ class PatientSchema(BaseSchema, BaseModel):
         from_attributes = True
 
 
-class PatientCreateRequest(BaseSchema, BaseModel):
+class PatientCreateRequest(BaseModel, BaseSchema):
     gender:Literal["male", "female"]
 
     height:int = Field(..., gt=0)
     weight:int = Field(..., gt=0)
 
     doctors:list[int]
+
+    class Config:
+        from_attributes = True
+
+
+
+class PatientUpdateRequest(BaseModel, BaseSchema):
+    gender:Literal["male", "female"]
+
+    height:int = Field(..., gt=0)
+    weight:int = Field(..., gt=0)
+
+    class Config:
+        from_attributes = True
+
+
+class PatientChangeDoctorsRequest(BaseModel):
+    doctor_id:int
 
     class Config:
         from_attributes = True
