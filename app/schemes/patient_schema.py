@@ -14,7 +14,7 @@ class DoctorForPatientSchema(BaseModel, BaseSchema):
         from_attributes = True
 
 
-class PatientSchema(BaseSchema, BaseModel):
+class PatientSchema(BaseModel, BaseSchema):
     id:int
 
     gender:Literal["male", "female"]
@@ -31,7 +31,7 @@ class PatientSchema(BaseSchema, BaseModel):
         from_attributes = True
 
 
-class PatientCreateRequest(BaseModel, BaseSchema):
+class PatientCreateRequest(BaseSchema, BaseModel):
     gender:Literal["male", "female"]
 
     height:int = Field(..., gt=0)
@@ -44,7 +44,7 @@ class PatientCreateRequest(BaseModel, BaseSchema):
 
 
 
-class PatientUpdateRequest(BaseModel, BaseSchema):
+class PatientUpdateRequest(BaseSchema, BaseModel):
     gender:Literal["male", "female"]
 
     height:int = Field(..., gt=0)

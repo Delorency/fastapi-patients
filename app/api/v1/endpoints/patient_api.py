@@ -7,7 +7,7 @@ from app.schemes.filters import Pagination
 
 
 
-router = APIRouter("/patients", tags=["patients"])
+router = APIRouter(prefix="/patients", tags=["Patients"])
 
 
 
