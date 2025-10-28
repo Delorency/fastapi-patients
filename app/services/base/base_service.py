@@ -13,17 +13,19 @@ class BaseService:
     def get_list(self, pag:Pagination) -> list[BaseModel]:
         return self._repo._get_list(pag)
     
-    def get_by_id(self, id:int) -> BaseModel:
-        return self._repo._get_by_id(id)
+    def get_by_id_with_many2many(self, id:int) -> BaseModel:
+        return self._repo._get_by_id_with_many2many(id)
     
     def create(self, schema:BaseModel) -> BaseModel:
         return self._repo._create(schema)
     
     def full_update(self, id:int, schema:BaseModel) -> BaseModel:
-        return self._repo._update(id, schema, exclude_none=False)
-    
+        self._repo._update(id, schema, exclude_none=False)
+        return self.get_by_id_with_many2many(id)
+
     def partial_update(self, id:int, schema:BaseModel) -> BaseModel:
-        return self._repo._update(id, schema, exclude_none=True)
-    
+        self._repo._update(id, schema, exclude_none=True)
+        return self.get_by_id_with_many2many(id)    
+
     def delete(self, id:int):
         return self._repo._delete(id)

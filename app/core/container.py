@@ -18,11 +18,10 @@ class Container(containers.DeclarativeContainer):
 
 
     # Repos
-    doctor_repo = providers.Factory(DoctorRepo, session=database.provided.session)
-    patient_repo = providers.Factory(PatientRepo, session=database.provided.session)
     patient2doctor_repo = providers.Factory(Patient2DoctorRepo, session=database.provided.session)
-
+    doctor_repo = providers.Factory(DoctorRepo, session=database.provided.session, p2d=patient2doctor_repo)
+    patient_repo = providers.Factory(PatientRepo, session=database.provided.session, p2d=patient2doctor_repo)
 
     # Services
-    doctor_service = providers.Factory(DoctorService, repo=doctor_repo, p2d=patient2doctor_repo)
-    patient_service = providers.Factory(PatientService, repo=patient_repo, p2d=patient2doctor_repo)
+    doctor_service = providers.Factory(DoctorService, repo=doctor_repo)
+    patient_service = providers.Factory(PatientService, repo=patient_repo)

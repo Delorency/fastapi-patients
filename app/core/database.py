@@ -9,7 +9,7 @@ from sqlalchemy.orm import sessionmaker, scoped_session, Session
 class Database:
     def __init__(self, uri:str) -> None:
         self._engine = create_engine(url=uri, echo=True)
-        self._sessionmaker = sessionmaker(bind=self._engine, autocommit=True, autoflush=True)
+        self._sessionmaker = sessionmaker(bind=self._engine, autoflush=True)
         self._scoped_session = scoped_session(self._sessionmaker)
 
 

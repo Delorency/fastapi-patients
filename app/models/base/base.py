@@ -12,8 +12,8 @@ class Base(DeclarativeBase): pass
 class BaseModel(Base):
     __abstract__ = True
     id:Mapped[int] = mapped_column(BigInteger, primary_key=True)
-    created_at:Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
-    updated_at:Mapped[datetime] = mapped_column(DateTime(timezone=True), server_onupdate=func.now())
+    created_at:Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), default=func.now())
+    updated_at:Mapped[datetime] = mapped_column(DateTime(timezone=True), server_onupdate=func.now(), default=func.now())
 
 
 class FioBase(Base):

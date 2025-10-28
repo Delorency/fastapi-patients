@@ -1,13 +1,13 @@
 from typing import Callable
 from contextlib import AbstractContextManager
 from sqlalchemy import desc
-from sqlalchemy.orm import Session, selectinload
+from sqlalchemy.orm import Session
 
 from pydantic import BaseModel as PydanticBaseModel
 
 from app.models.base import BaseModel
 from app.schemes.filters import Pagination
-from app.core.exceptions import NotFoundError, ServerSideError
+from app.core.exceptions import NotFoundError, ServerSideError, BadRequestError
 
 
 
@@ -25,16 +25,11 @@ class BaseRepo:
                 .offset(pag.page-1 * pag.limit).limit(pag.limit)
             ).all()
         return ServerSideError()
-
+    
 
     def _get_by_id(self, id:int) -> BaseModel:
         with self._session() as session:
-            obj = (
-                session.query(self._model)
-                .filter(self._model.id==id)
-                .options(selectinload(self._model.doctors))
-                .first()
-            )
+            obj = session.query(self._model).filter(self._model.id==id).first()
             
             if obj is None:
                 raise NotFoundError(f'Not found with id={id}')
@@ -43,16 +38,14 @@ class BaseRepo:
         return ServerSideError()
         
 
-    def _update(self, id:int, schema:PydanticBaseModel, exclude_none:bool = True) -> BaseModel:
+    def _update(self, id:int, schema:PydanticBaseModel, exclude_none:bool = True) -> None:
         with self._session() as session:
             try:
-                query = session.query(self._model).filter(self._model.id==id).update(**schema.model_dump(exclude_none=exclude_none))
+                query = session.query(self._model).filter(self._model.id==id).update(schema.model_dump(exclude_none=exclude_none))
                 session.commit()
             except Exception as e:
                 session.rollback()
-                raise e
-            
-            return self._get_by_id(id)
+                raise BadRequestError()
         return ServerSideError()
 
 

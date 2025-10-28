@@ -12,4 +12,4 @@ class Patient2Doctor(Base):
     patient_id: Mapped[int] = mapped_column(ForeignKey('patient.id', ondelete="CASCADE"), primary_key=True)
     doctor_id: Mapped[int] = mapped_column(ForeignKey('doctor.id', ondelete="CASCADE"), primary_key=True)
 
-    created_at:Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    created_at:Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), default=func.now())

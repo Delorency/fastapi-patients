@@ -3,3 +3,10 @@ from .endpoints import *
 
 
 subapp = FastAPI()
+
+routers = [
+    patient_router,
+]
+
+for router in routers:
+    subapp.include_router(router)

@@ -1,10 +1,10 @@
 from typing import Callable
 from contextlib import AbstractContextManager
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, selectinload
 
 from .base import BaseRepo
 
-from app.core.exceptions import BadRequestError, ServerSideError
+from app.core.exceptions import BadRequestError, NotFoundError, ServerSideError
 from app.models import Patient
 from app.schemes.patient_schema import PatientCreateRequest
 from .patient2doctor_repo import Patient2DoctorRepo
@@ -17,24 +17,44 @@ class PatientRepo(BaseRepo):
         self.p2d_repo = p2d
 
 
-    def _create(self, schema:PatientCreateRequest) -> Patient:
+    def _get_by_id_with_many2many(self, id:int) -> Patient:
         with self._session() as session:
-            data = schema.model_dump()
+            obj = (
+                session.query(self._model)
+                .filter(self._model.id==id)
+                .options(selectinload(self._model.doctors))
+                .first()
+            )
+            
+            if obj is None:
+                raise NotFoundError(f'Not found with id={id}')
 
-            doctors_list = data.get("doctors", [])
-            del data["doctors"]
+            return obj
+        return ServerSideError()
 
-            obj = self._model(**data)
+
+    def _create(self, schema:PatientCreateRequest) -> Patient:
+        data = schema.model_dump()
+
+        doctors_list = data.get("doctors")
+        del data["doctors"]
+
+        obj = self._model(**data)
+        with self._session() as session:
             try:
                 session.add(obj)
+                session.flush()
+                session.add_all( self.p2d_repo._doctors2patient_list(obj.id, doctors_list) )
                 session.commit()
                 session.refresh(obj)
-                self.p2d_repo._add_doctors2patient(obj.id, doctors_list)
-                session.refresh(obj)
+
+                if hasattr(obj, 'doctors'): obj.doctors
+
+                return obj
             except Exception as e:
                 session.rollback()
-                raise BadRequestError(str(e.orig))
-            return obj
+                raise BadRequestError(str(e))
+            
         return ServerSideError()
     
 

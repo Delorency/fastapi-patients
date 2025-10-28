@@ -13,24 +13,11 @@ class Patient2DoctorRepo(BaseRepo):
         super().__init__(Patient2Doctor, session)
 
 
-    def _add_patients2doctor(self, doctor_id:int, patients:list[int]) -> None:
-        list_data:list[Patient2Doctor] = [ self._model(doctor_id=doctor_id, patient_id=id) for id in patients ] 
-        with self._session() as session:
-            session.add_all(list_data)
-            session.commit()
-            return 
-        
-        return ServerSideError()
-    
+    def _patients2doctor_list(self, doctor_id:int, patients:list[int]) -> list[Patient2Doctor]:
+        return [ self._model(doctor_id=doctor_id, patient_id=id) for id in patients ] 
 
-    def _add_doctors2patient(self, patient_id:int, doctors:list[int]) -> None:
-        list_data:list[Patient2Doctor] = [ self._model(patient_id=patient_id, doctor_id=id) for id in doctors ] 
-        with self._session() as session:
-            session.add_all(list_data)
-            session.commit()
-            return 
-        
-        return ServerSideError()
+    def _doctors2patient_list(self, patient_id:int, doctors:list[int]) -> list[Patient2Doctor]:
+        return [ self._model(patient_id=patient_id, doctor_id=id) for id in doctors ] 
     
 
     def _create_patient_doctor_pair(self, patient_id:int, doctor_id:int) -> None:

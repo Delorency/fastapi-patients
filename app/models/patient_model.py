@@ -6,7 +6,6 @@ from sqlalchemy import SmallInteger, func, Date, Enum
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from .base import BaseModel, FioBase
-from .patient2doctor import Patient2Doctor
 
 
 
@@ -25,7 +24,7 @@ class Patient(BaseModel, FioBase):
     weight:Mapped[int] = mapped_column(SmallInteger)
 
     doctors:Mapped[list["Doctor"]] = relationship(
-        secondary=Patient2Doctor,
+        secondary="patient2doctor",
         back_populates="patients",
         order_by="desc(Doctor.created_at)"
     )
