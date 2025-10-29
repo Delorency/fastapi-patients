@@ -47,14 +47,13 @@ class DoctorRepo(BaseRepo):
                 session.flush()
                 session.add_all( self.p2d_repo._patients2doctor_list(obj.id, patients_list) )
                 session.commit()
-                session.refresh(obj)
 
                 if hasattr(obj, 'patients'): obj.patients
 
                 return obj
             except Exception as e:
                 session.rollback()
-                raise BadRequestError(str(e))
+                raise BadRequestError()
 
         return ServerSideError()
     

@@ -46,20 +46,12 @@ class PatientRepo(BaseRepo):
                 session.flush()
                 session.add_all( self.p2d_repo._doctors2patient_list(obj.id, doctors_list) )
                 session.commit()
-                session.refresh(obj)
 
                 if hasattr(obj, 'doctors'): obj.doctors
 
                 return obj
             except Exception as e:
                 session.rollback()
-                raise BadRequestError(str(e))
+                raise BadRequestError()
             
         return ServerSideError()
-    
-
-    def _add_doctor_to_patient(self, patient_id:int, doctor_id:int) -> None:
-        return self.p2d_repo._create_doctor_patient_pair(patient_id, doctor_id)
-
-    def _remove_doctor_from_patient(self, patient_id:int, doctor_id:int) -> None:
-        return self.p2d_repo._delete_doctor_patient_pair(patient_id, doctor_id)

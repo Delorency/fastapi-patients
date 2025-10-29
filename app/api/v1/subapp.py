@@ -6,6 +6,7 @@ subapp = FastAPI()
 
 routers = [
     patient_router,
+    doctor_router
 ]
 
 for router in routers:

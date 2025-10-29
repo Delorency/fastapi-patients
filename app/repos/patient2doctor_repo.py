@@ -22,7 +22,7 @@ class Patient2DoctorRepo(BaseRepo):
 
     def _create_patient_doctor_pair(self, patient_id:int, doctor_id:int) -> None:
         with self._session() as session:
-            obj = session._model(patient_id=patient_id, doctor_id=doctor_id)
+            obj = self._model(patient_id=patient_id, doctor_id=doctor_id)
             try:
                 session.add(obj)
                 session.commit()

@@ -40,18 +40,6 @@ def partial_patient_update(id:int, schema:PatientUpdateRequest, service = Depend
     return service.partial_update(id, schema)
 
 
-@router.post("/{id}/doctor/add", summary="Add doctor to patient", status_code=200)
-@inject
-def add_doctor_to_patient(id:int, schema:PatientChangeDoctorsRequest, service = Depends(Provide[Container.patient_service])) -> None:
-    return service.add_doctor(id, schema.doctor_id)
-
-
-@router.delete("/{id}/doctor/delete", summary="Delete doctor from patient", status_code=200)
-@inject
-def remove_doctor_from_patient(id:int, schema:PatientChangeDoctorsRequest, service = Depends(Provide[Container.patient_service])) -> None:
-    return service.remove_doctor(id, schema.doctor_id)
-
-
 @router.delete("/{id}", summary="Delete patient", status_code=204)
 @inject
 def delete_patient(id:int, service = Depends(Provide[Container.patient_service])) -> None:

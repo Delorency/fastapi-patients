@@ -22,7 +22,7 @@ class BaseRepo:
             return (
                 session.query(self._model)
                 .order_by(desc(self._model.created_at))
-                .offset(pag.page-1 * pag.limit).limit(pag.limit)
+                .offset((pag.page-1) * pag.limit).limit(pag.limit)
             ).all()
         return ServerSideError()
     

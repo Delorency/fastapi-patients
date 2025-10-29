@@ -9,7 +9,8 @@ from app.services import *
 class Container(containers.DeclarativeContainer):
     wiring_config = containers.WiringConfiguration(
         modules=[
-            "app.api.v1.endpoints.patient_api"
+            "app.api.v1.endpoints.patient_api",
+            "app.api.v1.endpoints.doctor_api"
         ]
     )
 
