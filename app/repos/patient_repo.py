@@ -55,3 +55,10 @@ class PatientRepo(BaseRepo):
                 raise BadRequestError()
             
         return ServerSideError()
+    
+
+    def _add_doctor_to_patient(self, patient_id:int, doctor_id:int) -> None:
+        return self.p2d_repo._create_patient_doctor_pair(patient_id, doctor_id)
+
+    def _remove_doctor_from_patient(self, patient_id:int, doctor_id:int) -> None:
+        return self.p2d_repo._delete_patient_doctor_pair(patient_id, doctor_id)

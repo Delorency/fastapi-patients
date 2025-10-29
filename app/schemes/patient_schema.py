@@ -39,6 +39,29 @@ class PatientSchema(BaseModel, BaseSchema):
         from_attributes = True
 
 
+class PatientGetListSchema(BaseModel, BaseSchema):
+    id:int
+
+    gender:Literal["male", "female"]
+
+    height:int = Field(..., gt=0)
+    weight:int = Field(..., gt=0)
+
+    created_at:datetime
+    updated_at:datetime
+
+
+    @field_validator('gender', mode='before')
+    @classmethod
+    def validate_gender(cls, v):
+        if hasattr(v, 'value'):
+            return v.value
+        return v
+
+    class Config:
+        from_attributes = True
+
+
 class PatientCreateRequest(BaseSchema, BaseModel):
     gender:Literal["male", "female"]
 

@@ -40,6 +40,16 @@ class DoctorSchema(BaseModel, BaseSchema):
         from_attributes = True
 
 
+class DoctorGetListSchema(BaseModel, BaseSchema):
+    id:int
+
+    created_at:datetime
+    updated_at:datetime
+
+    class Config:
+        from_attributes = True
+
+
 class DoctorCreateRequest(BaseSchema, BaseModel):
 
     patients:list[int]
@@ -53,13 +63,6 @@ class DoctorUpdateRequest(BaseModel):
     last_name:Optional[str] = None
     first_name:Optional[str] = None
     middle_name:Optional[str] = None
-
-    class Config:
-        from_attributes = True
-
-
-class DoctorChangePatientsRequest(BaseModel):
-    patient_id:int
 
     class Config:
         from_attributes = True
