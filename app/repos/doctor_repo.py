@@ -42,6 +42,12 @@ class DoctorRepo(BaseRepo):
         obj = self._model(**data)
         id:int
         with self._session() as session:
+            if session.query(self._model).filter(
+                self._model.first_name==data["first_name"],
+                self._model.middle_name==data["middle_name"],
+                self._model.last_name==data["last_name"]
+            ).first():
+                raise BadRequestError("Already exist")
             try:
                 session.add(obj)
                 session.flush()

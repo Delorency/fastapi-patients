@@ -56,12 +56,17 @@ class PatientRepo(BaseRepo):
 
     def _create(self, schema:PatientCreateRequest) -> Patient:
         data = schema.model_dump()
-
         doctors_list = data.get("doctors")
         del data["doctors"]
 
         obj = self._model(**data)
         with self._session() as session:
+            if session.query(self._model).filter(
+                self._model.first_name==data["first_name"],
+                self._model.middle_name==data["middle_name"],
+                self._model.last_name==data["last_name"]
+            ).first():
+                raise BadRequestError("Already exist")
             try:
                 session.add(obj)
                 session.flush()
@@ -73,7 +78,7 @@ class PatientRepo(BaseRepo):
                 return obj
             except Exception as e:
                 session.rollback()
-                raise BadRequestError("Already exists")
+                raise BadRequestError()
             
         return ServerSideError()
     
