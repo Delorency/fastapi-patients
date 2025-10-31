@@ -23,6 +23,7 @@ class PatientSchema(BaseModel, BaseSchema):
     weight:int = Field(..., gt=0)
 
     doctors:list[DoctorForPatientSchema]
+    birthday:date
 
     created_at:datetime
     updated_at:datetime
@@ -46,6 +47,8 @@ class PatientGetListSchema(BaseModel, BaseSchema):
 
     height:int = Field(..., gt=0)
     weight:int = Field(..., gt=0)
+    
+    birthday:date
 
     created_at:datetime
     updated_at:datetime

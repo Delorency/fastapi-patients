@@ -2,8 +2,9 @@ from dependency_injector.wiring import Provide, inject
 from fastapi import APIRouter, Depends
 
 from app.core.container import Container
+from app.schemes.filters import FullNameFilter, AgeFilter, GenderFilter
 from app.schemes.patient_schema import PatientSchema, PatientCreateRequest, PatientUpdateRequest, \
-    PatientChangeDoctorsRequest, PatientGetListSchema
+    PatientChangeDoctorsRequest, PatientGetListSchema 
 from app.schemes.filters import Pagination
 
 
@@ -13,8 +14,13 @@ router = APIRouter(prefix="/patients", tags=["Patients"])
 
 @router.get("/", summary="Get list patients")
 @inject
-def get_list(pag = Depends(Pagination), service = Depends(Provide[Container.patient_service])) -> list[PatientGetListSchema]:
-    return service.get_list(pag)
+def get_list(
+    pag = Depends(Pagination), 
+    full_name_filter = Depends(FullNameFilter),
+    age_filter = Depends(AgeFilter),
+    gender_filter = Depends(GenderFilter),
+    service = Depends(Provide[Container.patient_service])) -> list[PatientGetListSchema]:
+    return service.get_list_with_filters(pag, full_name_filter, age_filter, gender_filter)
 
 
 @router.get("/{id}", summary="Get patient by id")
