@@ -1,6 +1,6 @@
 from app.repos import PatientRepo
 from app.schemes.filters import Pagination, FullNameFilter, AgeFilter, GenderFilter
-from app.models import Patient
+from app.models import Patient, MBR
 
 from .base import BaseService
 
@@ -19,3 +19,5 @@ class PatientService(BaseService):
     
     def remove_doctor(self, patient_id:int, doctor_id:int) -> None:
         return self._repo._remove_doctor_from_patient(patient_id, doctor_id)
+    
+    def create_mbr(self, patient_id:int, first:bool) -> MBR:pass

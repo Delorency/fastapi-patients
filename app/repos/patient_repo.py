@@ -8,6 +8,7 @@ from .base import BaseRepo
 
 from app.core.exceptions import BadRequestError, NotFoundError, ServerSideError
 from app.models import Patient
+from .mbr_repo import MBRRepo
 from app.schemes.patient_schema import PatientCreateRequest
 from .patient2doctor_repo import Patient2DoctorRepo
 from app.schemes.filters import Pagination, FullNameFilter, AgeFilter, GenderFilter
@@ -15,9 +16,10 @@ from app.schemes.filters import Pagination, FullNameFilter, AgeFilter, GenderFil
 
 
 class PatientRepo(BaseRepo):
-    def __init__(self, session:Callable[..., AbstractContextManager[Session]], p2d:Patient2DoctorRepo) -> None:
+    def __init__(self, session:Callable[..., AbstractContextManager[Session]], p2d:Patient2DoctorRepo, mbr:MBRRepo) -> None:
         super().__init__(Patient, session)
         self.p2d_repo = p2d
+        self.mbr_repo = mbr
 
     def _get_list_with_filters(self, pag:Pagination, full_name_filter:FullNameFilter,
         age_filter:AgeFilter, gender_filter:GenderFilter ) -> list[Patient]:
