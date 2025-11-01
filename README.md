@@ -22,7 +22,7 @@ or
     make docker
 ```
 the service will be on localhost:${DOCKER_HOST_PORT}       
-swagger - localhost:${DOCKER_HOST_PORT}/docs   
+swagger - localhost:${DOCKER_HOST_PORT}/v1/docs   
 
 #### In cmd   
 if you want ot run the service in cmd, you need to install all necessary dependencies    
@@ -41,4 +41,4 @@ Use requirements.txt
 
 
 the service will be on localhost:${PORT}    
-swagger - localhost:${PORT}/docs   
+swagger - localhost:${PORT}/v1/docs   
