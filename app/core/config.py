@@ -43,6 +43,13 @@ class DBConfig(BaseSettings):
 class APIConfig(BaseSettings):
 	page:int = os.getenv('PAGE', 1)
 	limit:int = os.getenv('LIMIT', 10)
+
+class URLConfig(BaseSettings):
+	url:str = os.getenv('URL', None)
+	cfg:str
+	for cfg in [url]:
+		if cfg is None:
+			raise Exception('Parsing url config error')
 	
 
 class Configs(BaseSettings):
@@ -50,6 +57,7 @@ class Configs(BaseSettings):
 	servercfg:ServerConfig = ServerConfig()
 	dbcfg:DBConfig = DBConfig()
 	apicfg:APIConfig = APIConfig()
+	urlconfig:URLConfig = URLConfig()
 
 
 configs = Configs()

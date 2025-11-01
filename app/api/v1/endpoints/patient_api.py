@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends
 from app.core.container import Container
 from app.schemes.filters import FullNameFilter, AgeFilter, GenderFilter
 from app.schemes.patient_schema import PatientSchema, PatientCreateRequest, PatientUpdateRequest, \
-    PatientChangeDoctorsRequest, PatientGetListSchema 
+    PatientChangeDoctorsRequest, PatientGetListSchema, PatientBMIResponse 
 from app.schemes.filters import Pagination
 from app.schemes.bmr_schema import BMRSchema
 
@@ -82,3 +82,9 @@ def create_bmr_first(id:int, service = Depends(Provide[Container.patient_service
 @inject
 def create_bmr_second(id:int, service = Depends(Provide[Container.patient_service])) -> BMRSchema:
     return service.create_bmr(id, False)
+
+
+@router.get("/{id}/bmi", summary="Get bmi for patient")
+@inject
+def get_bmi(id:int, service = Depends(Provide[Container.patient_service])) -> PatientBMIResponse:
+    return service.get_bmi(id)

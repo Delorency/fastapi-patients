@@ -1,6 +1,11 @@
+import requests
 from datetime import date
+
+from app.core.config import configs
+from app.core.exceptions import ForbiddenError
 from app.repos import PatientRepo
 from app.schemes.filters import Pagination, FullNameFilter, AgeFilter, GenderFilter
+from app.schemes.patient_schema import PatientBMIResponse
 from app.models import Patient, BMR
 from app.models.bmr_model import BMREnum
 from app.utils import *
@@ -26,8 +31,8 @@ class PatientService(BaseService):
     def get_bmr_list(self, id:int, pag:Pagination) -> list[BMR]:
         return self._repo._get_bmr_list(id, pag)
     
-    def create_bmr(self, patient_id:int, first:bool) -> BMR:
-        obj = self._repo._get_by_id(patient_id)
+    def create_bmr(self, id:int, first:bool) -> BMR:
+        obj = self._repo._get_by_id(id)
         today = date.today()
         year = today.year - obj.birthday.year
 
@@ -41,4 +46,22 @@ class PatientService(BaseService):
         if first: bmr_value, formula = generate_bmr_mif_sanj(height, weight, year, obj.gender=='male'), BMREnum.mif_sanj
         else: bmr_value, formula = generate_bmr_har_ben(height, weight, year, obj.gender=='male'), BMREnum.har_ben
 
-        return self._repo._create_bmr(patient_id, formula, bmr_value)
+        return self._repo._create_bmr(id, formula, bmr_value)
+    
+    def get_bmi(self, id:int) -> PatientBMIResponse:
+        obj = self._repo._get_by_id(id)
+        url:str = configs.urlconfig.url
+        height:float = obj.height/100
+        weight:float = obj.weight
+
+        req = requests.get(url+f'/{weight}/{height}')
+        if req.status_code == 200:
+            data = req.json()
+            data["category"] = data["Category"]
+            del data["Category"]
+
+            return PatientBMIResponse(**data)
+
+        raise ForbiddenError()
+
+        

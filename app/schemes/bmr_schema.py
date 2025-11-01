@@ -27,7 +27,7 @@ class BMRSchema(BaseModel):
 
     @field_validator('formula', mode='before')
     @classmethod
-    def validate_gender(cls, v):
+    def validate_formula(cls, v):
         if hasattr(v, 'value'):
             return v.value
         return v

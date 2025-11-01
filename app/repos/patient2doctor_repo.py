@@ -27,7 +27,7 @@ class Patient2DoctorRepo(BaseRepo):
                 session.add(obj)
                 session.commit()
             except:
-                raise DuplicatedError("Already exist")
+                raise DuplicatedError("Not found or already exist")
             return
         
         return ServerSideError()
@@ -38,7 +38,7 @@ class Patient2DoctorRepo(BaseRepo):
             obj = session.query(self._model).filter(self._model.patient_id==patient_id, self._model.doctor_id==doctor_id).first()
 
             if obj is None:
-                raise NotFoundError(f'Not found with pair with id {patient_id} - {doctor_id}')
+                raise NotFoundError(f'Not found pair with id {patient_id} - {doctor_id}')
             
             try:
                 session.delete(obj)

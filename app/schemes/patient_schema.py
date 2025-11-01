@@ -98,3 +98,20 @@ class PatientChangeDoctorsRequest(BaseModel):
 
     class Config:
         from_attributes = True
+
+
+class PatientBMIResponse(BaseModel):
+    category:str
+    bmi:float
+    height:int 
+    weight:int
+
+    @field_validator('height', mode='before')
+    @classmethod
+    def validate_height(cls, v):
+        return int(v * 100)
+    
+    @field_validator('weight', mode='before')
+    @classmethod
+    def validate_weight(cls, v):
+        return int(round(v))
