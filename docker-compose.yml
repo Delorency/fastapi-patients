@@ -1,0 +1,27 @@
+services:
+  db:
+    image: postgres:15
+    restart: always
+    container_name: db
+    environment:
+      POSTGRES_DB: ${DB_NAME} 
+      POSTGRES_USER: ${DB_USER} 
+      POSTGRES_PASSWORD: ${DB_PASS} 
+    ports:
+      - "${DOCKER_HOST_DB_PORT}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  app:
+    build: .
+    restart: always
+    container_name: patients-api
+    depends_on:
+      - db
+    environment:
+      DB_HOST: db
+    ports:
+      - "${DOCKER_HOST_PORT}:${PORT}"
+      
+volumes:
+  postgres_data:
