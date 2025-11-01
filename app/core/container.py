@@ -20,8 +20,9 @@ class Container(containers.DeclarativeContainer):
 
     # Repos
     patient2doctor_repo = providers.Factory(Patient2DoctorRepo, session=database.provided.session)
+    bmr_repo = providers.Factory(BMRRepo, session=database.provided.session)
     doctor_repo = providers.Factory(DoctorRepo, session=database.provided.session, p2d=patient2doctor_repo)
-    patient_repo = providers.Factory(PatientRepo, session=database.provided.session, p2d=patient2doctor_repo)
+    patient_repo = providers.Factory(PatientRepo, session=database.provided.session, p2d=patient2doctor_repo, bmr=bmr_repo)
 
     # Services
     doctor_service = providers.Factory(DoctorService, repo=doctor_repo)

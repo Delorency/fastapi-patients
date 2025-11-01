@@ -6,6 +6,7 @@ from app.schemes.filters import FullNameFilter, AgeFilter, GenderFilter
 from app.schemes.patient_schema import PatientSchema, PatientCreateRequest, PatientUpdateRequest, \
     PatientChangeDoctorsRequest, PatientGetListSchema 
 from app.schemes.filters import Pagination
+from app.schemes.bmr_schema import BMRSchema
 
 
 
@@ -63,3 +64,21 @@ def add_doctor_to_patient(id:int, schema:PatientChangeDoctorsRequest, service = 
 @inject
 def remove_doctor_to_patient(id:int, schema:PatientChangeDoctorsRequest, service = Depends(Provide[Container.patient_service])) -> None:
     return service.remove_doctor(id, schema.doctor_id)
+
+
+@router.get("/{id}/bmr", summary="Get all bmr for patient")
+@inject
+def get_list_bmr(id:int, pag = Depends(Pagination), service = Depends(Provide[Container.patient_service])) -> list[BMRSchema]:
+    return service.get_bmr_list(id, pag)
+
+
+@router.post("/{id}/bmr/mifflin-st-jeor", summary="Calculate bmr for patient")
+@inject
+def create_bmr_first(id:int, service = Depends(Provide[Container.patient_service])) -> BMRSchema:
+    return service.create_bmr(id, True)
+
+
+@router.post("/{id}/bmr/harris-benedict", summary="Calculate bmr for patient")
+@inject
+def create_bmr_second(id:int, service = Depends(Provide[Container.patient_service])) -> BMRSchema:
+    return service.create_bmr(id, False)

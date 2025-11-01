@@ -1,25 +1,25 @@
 from datetime import date
 from typing import Callable
 from contextlib import AbstractContextManager
-from sqlalchemy import func, desc
+from sqlalchemy import desc
 from sqlalchemy.orm import Session, selectinload
 
-from .base import BaseRepo
-
 from app.core.exceptions import BadRequestError, NotFoundError, ServerSideError
-from app.models import Patient
-from .mbr_repo import MBRRepo
+from app.models import Patient, BMR
 from app.schemes.patient_schema import PatientCreateRequest
-from .patient2doctor_repo import Patient2DoctorRepo
 from app.schemes.filters import Pagination, FullNameFilter, AgeFilter, GenderFilter
+
+from .base import BaseRepo
+from .bmr_repo import BMRRepo
+from .patient2doctor_repo import Patient2DoctorRepo
 
 
 
 class PatientRepo(BaseRepo):
-    def __init__(self, session:Callable[..., AbstractContextManager[Session]], p2d:Patient2DoctorRepo, mbr:MBRRepo) -> None:
+    def __init__(self, session:Callable[..., AbstractContextManager[Session]], p2d:Patient2DoctorRepo, bmr:BMRRepo) -> None:
         super().__init__(Patient, session)
         self.p2d_repo = p2d
-        self.mbr_repo = mbr
+        self.bmr_repo = bmr
 
     def _get_list_with_filters(self, pag:Pagination, full_name_filter:FullNameFilter,
         age_filter:AgeFilter, gender_filter:GenderFilter ) -> list[Patient]:
@@ -90,3 +90,9 @@ class PatientRepo(BaseRepo):
 
     def _remove_doctor_from_patient(self, patient_id:int, doctor_id:int) -> None:
         return self.p2d_repo._delete_patient_doctor_pair(patient_id, doctor_id)
+    
+    def _get_bmr_list(self, id:int, pag:Pagination) -> list[BMR]:
+        return self.bmr_repo._get_bmr_list(id, pag)
+    
+    def _create_bmr(self, patient_id:int, formula:str, bmr_value:float) -> BMR:
+        return self.bmr_repo._create(patient_id, formula, bmr_value)

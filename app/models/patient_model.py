@@ -28,8 +28,8 @@ class Patient(BaseModel, FioBase):
         back_populates="patients",
         order_by="desc(Doctor.created_at)"
     )
-    mbrs:Mapped[list["MBR"]] = relationship(
+    mbrs:Mapped[list["BMR"]] = relationship(
         back_populates='patient',
-        order_by="desc(MBR.created_at)",
+        order_by="desc(BMR.created_at)",
         cascade="all",   
     )
